@@ -1,0 +1,62 @@
+---
+Profiles:
+  ThreeOrgsGenesis:
+    Orderer:
+      <<: *OrdererDefaults
+      Organizations:
+      - *OrdererOrg
+    Consortiums:
+      SupplierConsortium:
+        Organizations:
+        - *Supplier1Org
+        - *Supplier2Org
+        - *Supplier3Org
+  ThreeOrgsChannel:
+    Consortium: SupplierConsortium
+    Application:
+      <<: *ApplicationDefaults
+      Organizations:
+      - *Supplier1Org
+      - *Supplier2Org
+      - *Supplier3Org
+
+Organizations:
+- &OrdererOrg
+  Name: OrdererOrg
+  ID: OrdererMSP
+  MSPDir: cli/peers/ordererOrganizations/orderer-org/msp
+- &Supplier1Org
+  Name: Supplier1OrgMSP
+  ID: Supplier1OrgMSP
+  MSPDir: cli/peers/peerOrganizations/supplier1-org/msp
+  AnchorPeers:
+  - Host: supplier1-peer
+    Port: 7051
+- &Supplier2Org
+  Name: Supplier2OrgMSP
+  ID: Supplier2OrgMSP
+  MSPDir: cli/peers/peerOrganizations/supplier2-org/msp
+  AnchorPeers:
+  - Host: supplier2-peer
+    Port: 7051
+- &Supplier3Org
+  Name: Supplier3OrgMSP
+  ID: Supplier3OrgMSP
+  MSPDir: cli/peers/peerOrganizations/supplier3-org/msp
+  AnchorPeers:
+  - Host: supplier3-peer
+    Port: 7051
+
+Orderer: &OrdererDefaults
+  OrdererType: solo
+  Addresses:
+  - orderer0:7050
+  BatchTimeout: 2s
+  BatchSize:
+    MaxMessageCount: 10
+    AbsoluteMaxBytes: 99 MB
+    PreferredMaxBytes: 512 KB
+  Organizations:
+
+Application: &ApplicationDefaults
+  Organizations:
